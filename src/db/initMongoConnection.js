@@ -1,10 +1,15 @@
-// mongodb+srv://KanokoAomi:<db_password>@cluster0.pl7kc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 import mongoose from 'mongoose';
+import { getEnvVar } from '../../getEnvVar.js';
 
 export const initMongoConnection = async () => {
+  // const url = getEnvVar('MONGODB_URL');
+  const user = getEnvVar("MONGODB_USER");
+  const password = getEnvVar("MONGODB_PASSWORD");
+  const url = getEnvVar("MONGODB_URL");
+  const db = getEnvVar("MONGODB_DB");
   try {
     await mongoose.connect(
-      'mongodb+srv://KanokoAomi:cS58jBd7FE5LtS_@cluster0.pl7kc.mongodb.net/contacts?retryWrites=true&w=majority&appName=Cluster0',
+      `mongodb+srv://${user}:${password}@${url}/${db}?retryWrites=true&w=majority&appName=Cluster0`,
     );
     console.log('Mongo connection successfully established!');
   } catch (error) {

@@ -4,7 +4,8 @@ import pino from 'pino-http';
 
 import dotenv from 'dotenv';
 // import { ContactCollection } from './db/models/contact';
-import { getContactById, getContacts } from './service/contact';
+// import { getContactById, getContacts } from './service/contact';
+import * as contactServises from './services/contact.js';
 
 dotenv.config();
 const PORT = Number(process.env.PORT);
@@ -42,53 +43,53 @@ export const setupServer = () => {
     });
   });
 
-  // getting all the contacts 
+  // getting all the contacts
 
   app.get('/contacts', async (req, res) => {
-    const data = await getContacts;
+    const data = await contactServises.getContacts();
 
-    if(!data) {
-      return res.status(404).json({
-        status: 404,
-        message: "No data, bro!",
-      });
-    }
+    // if (!data) {
+    //   return res.status(404).json({
+    //     status: 404,
+    //     message: 'No data, bro!',
+    //   });
+    // }
 
     res.json({
       status: 200,
-      message: "Here you go!)",
+      message: 'Successfully found contacts!',
       data,
     });
   });
 
-  // getting all the contacts by ID 
+  // getting the contact by ID
 
-  app.get('/contacts/:id', async (req, res) => {
-    const {id} = req.params;
+  app.get('/contacts/:contactId', async (req, res) => {
+    const { id } = req.params;
 
-    const data = await getContactById(id);
+    const data = await contactServises.getContactById(id);
 
-    if(!data) {
+    if (!data) {
       return res.status(404).json({
         status: 404,
-        message: "No data, bro!",
+        message: 'No data, bro!',
       });
     }
 
     res.json({
       status: 200,
-      message: "Here you go!)",
+      message: 'Successfully found contact with id {contactId}!',
       data,
     });
   });
 
   app.use('*', (req, res) => {
     res.status(404).json({
-      message: 'Not found',
+      message: 'Contact not found',
     });
   });
 
   app.listen(PORT, () => {
-    console.log(`Server is running on port {PORT}`);
+    console.log(`Server is running on port ${PORT}`);
   });
 };

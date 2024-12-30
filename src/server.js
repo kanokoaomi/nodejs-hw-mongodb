@@ -16,19 +16,19 @@ export const setupServer = () => {
   const corsMiddleware = cors();
   app.use(corsMiddleware);
 
-  app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-    );
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'X-Requested-With, Content-Type, Authorization',
-    );
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-  });
+  // app.use((req, res, next) => {
+  //   res.setHeader('Access-Control-Allow-Origin', '*');
+  //   res.setHeader(
+  //     'Access-Control-Allow-Methods',
+  //     'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+  //   );
+  //   res.setHeader(
+  //     'Access-Control-Allow-Headers',
+  //     'X-Requested-With, Content-Type, Authorization',
+  //   );
+  //   res.setHeader('Access-Control-Allow-Credentials', true);
+  //   next();
+  // });
 
   const logger = pino({
     transport: {
@@ -72,7 +72,7 @@ export const setupServer = () => {
     if (!data) {
       return res.status(404).json({
         status: 404,
-        message: 'No data, bro!',
+        message: 'Contact not found',
       });
     }
 

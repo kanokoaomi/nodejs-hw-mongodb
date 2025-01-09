@@ -57,6 +57,7 @@ export const deleteContactController = async (req, res) => {
   const data = await contactServises.deleteContact({ _id: contactId });
 
   if (!data) {
+    console.log('Contact not found, throwing error');
     throw createError(404, 'Contact not found');
   }
 

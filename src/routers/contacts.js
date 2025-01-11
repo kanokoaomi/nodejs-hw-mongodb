@@ -8,7 +8,10 @@ import {
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../utils/validateBody.js';
-import { contactAddSchema } from '../validation/contacts.js';
+import {
+  contactAddSchema,
+  contactUpdateSchema,
+} from '../validation/contacts.js';
 
 const contactsRouter = express.Router();
 
@@ -24,7 +27,7 @@ contactsRouter.post(
 
 contactsRouter.patch(
   '/:contactId',
-  validateBody(contactAddSchema),
+  validateBody(contactUpdateSchema),
   ctrlWrapper(patchContactController),
 );
 

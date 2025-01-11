@@ -13,4 +13,13 @@ export const contactAddSchema = Joi.object({
     .valid(...contactTypeStr),
 });
 
-// export const contactUpdateSchema =
+export const contactUpdateSchema = Joi.object({
+  name: Joi.string().min(3).max(20),
+  phoneNumber: Joi.string().min(3).max(20),
+  email: Joi.string().min(3).max(20),
+  isFavourite: Joi.boolean().default(false),
+  contactType: Joi.string()
+    .min(3)
+    .max(20)
+    .valid(...contactTypeStr),
+});

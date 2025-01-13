@@ -8,7 +8,7 @@ import {
 } from '../validation/contacts.js';
 
 export const getContactsController = async (req, res) => {
-  const { page, perPage } = parsePaginationParams(req.params);
+  const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parsePaginationParams(req.query, sortByList);
   const data = await contactServises.getContacts({
     page,

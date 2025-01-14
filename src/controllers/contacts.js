@@ -1,8 +1,21 @@
 import * as contactServises from '../services/contact.js';
 import createError from 'http-errors';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { sortByList } from '../db/models/contact.js';
+import {
+  contactAddSchema,
+  contactUpdateSchema,
+} from '../validation/contacts.js';
 
 export const getContactsController = async (req, res) => {
-  const data = await contactServises.getContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parsePaginationParams(req.query, sortByList);
+  const data = await contactServises.getContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+  });
 
   res.json({
     status: 200,
@@ -28,6 +41,14 @@ export const getContactsByIdController = async (req, res) => {
 };
 
 export const postContactController = async (req, res) => {
+  try {
+    await contactAddSchema.validateAsync(req.body, {
+      abortEarly: false,
+    });
+  } catch (error) {
+    throw createError(400, error.message);
+  }
+
   const data = await contactServises.postContact(req.body);
 
   res.status(201).json({
@@ -39,6 +60,15 @@ export const postContactController = async (req, res) => {
 
 export const patchContactController = async (req, res) => {
   const { contactId } = req.params;
+
+  try {
+    await contactUpdateSchema.validateAsync(req.body, {
+      abortEarly: false,
+    });
+  } catch (error) {
+    throw createError(400, error.message);
+  }
+
   const { data } = await contactServises.patchContact(contactId, req.body);
 
   if (!data) {

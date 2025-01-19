@@ -29,9 +29,11 @@ export const getContactsController = async (req, res) => {
 };
 
 export const getContactsByIdController = async (req, res) => {
-  const { contactId } = req.params;
+  // const { contactId } = req.params;
+  const { _id: userId } = req.user;
+  const { id: _id } = req.params;
 
-  const data = await contactServises.getContactById(contactId);
+  const data = await contactServises.getContact({ id, userId });
 
   if (!data) {
     throw createError(404, 'Contact not found');
@@ -55,7 +57,7 @@ export const postContactController = async (req, res) => {
     throw createError(400, error.message);
   }
 
-  const data = await contactServises.postContact(...req.body, userId);
+  const data = await contactServises.postContact({ ...req.body, userId });
 
   res.status(201).json({
     status: 201,

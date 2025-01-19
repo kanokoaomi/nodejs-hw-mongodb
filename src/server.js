@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 import contactsRouter from './routers/contacts.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
@@ -15,6 +16,8 @@ export const setupServer = () => {
   const app = express();
   app.use(express.json());
 
+  app.use(cookieParser());
+
   const corsMiddleware = cors();
   app.use(corsMiddleware);
 
@@ -23,7 +26,7 @@ export const setupServer = () => {
       target: 'pino-pretty',
     },
   });
-  app.use(logger);
+  // app.use(logger);
 
   app.get('/', (req, res) => {
     res.json({

@@ -6,11 +6,15 @@ import {
   contactAddSchema,
   contactUpdateSchema,
 } from '../validation/contacts.js';
+import { findContactsByUser } from '../utils/filter/findContactsByUser.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parsePaginationParams(req.query, sortByList);
+  const { _id: userId } = req.user._id;
+  // const contactsByUser = findContactsByUser(userId);
   const data = await contactServises.getContacts({
+    userId,
     page,
     perPage,
     sortBy,
@@ -41,6 +45,8 @@ export const getContactsByIdController = async (req, res) => {
 };
 
 export const postContactController = async (req, res) => {
+  const { _id: userId } = req.user;
+
   try {
     await contactAddSchema.validateAsync(req.body, {
       abortEarly: false,
@@ -49,7 +55,7 @@ export const postContactController = async (req, res) => {
     throw createError(400, error.message);
   }
 
-  const data = await contactServises.postContact(req.body);
+  const data = await contactServises.postContact(...req.body, userId);
 
   res.status(201).json({
     status: 201,

@@ -41,16 +41,13 @@ export const requestResetToken = async (email) => {
   ).toString();
 
   const template = handlebars.compile(templateSource);
-  try {
-    const html = template({
-      name: user.username,
-      link: `${getEnvVar('APP_DOMAIN')}/reset-password?token=${resetToken}`,
-    });
-  } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      throw createHttpError(401, 'Token has expired');
-    }
-  }
+  const html = template({
+    name: user.username,
+    link: `${getEnvVar('APP_DOMAIN')}/reset-password?token=${resetToken}`,
+  });
+  // if (error.name === 'TokenExpiredError') {
+  //   throw createHttpError(401, 'Token has expired');
+  // }
 
   try {
     await sendEmail({

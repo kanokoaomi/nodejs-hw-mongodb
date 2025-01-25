@@ -9,3 +9,6 @@ export const SMTP = {
   SMTP_PASSWORD: 'SMTP_PASSWORD',
   SMTP_FROM: 'SMTP_FROM',
 };
+
+export const TEMP_UPLOAD_DIR = path.resolve('temp');
+export const UPLOADS_DIR = path.resolve('uploads');

@@ -7,6 +7,9 @@ import {
   contactUpdateSchema,
 } from '../validation/contacts.js';
 import { findContactsByUser } from '../utils/filter/findContactsByUser.js';
+import { saveFileToUploads } from '../utils/saveFileToUploads.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -29,7 +32,6 @@ export const getContactsController = async (req, res) => {
 };
 
 export const getContactsByIdController = async (req, res) => {
-  // const { contactId } = req.params;
   const { _id: userId } = req.user;
   const { contactId: _id } = req.params;
   // console.log(_id);
@@ -51,6 +53,16 @@ export const getContactsByIdController = async (req, res) => {
 export const postContactController = async (req, res) => {
   const { _id: userId } = req.user;
 
+  const cloudinaryEnable = getEnvVar('CLOUDINARY_ENABLE') === 'true';
+  let photo;
+  if (req.file) {
+    if (cloudinaryEnable) {
+      photo = await saveFileToCloudinary(req.file);
+    } else {
+      photo = await saveFileToUploadsDir(req.file);
+    }
+  }
+
   try {
     await contactAddSchema.validateAsync(req.body, {
       abortEarly: false,
@@ -59,7 +71,11 @@ export const postContactController = async (req, res) => {
     throw createError(400, error.message);
   }
 
-  const data = await contactServises.postContact({ ...req.body, userId });
+  const data = await contactServises.postContact({
+    ...req.body,
+    photo,
+    userId,
+  });
 
   res.status(201).json({
     status: 201,

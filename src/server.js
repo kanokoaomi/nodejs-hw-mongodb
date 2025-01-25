@@ -15,7 +15,7 @@ const PORT = Number(process.env.PORT);
 export const setupServer = () => {
   const app = express();
   app.use(express.json());
-
+  app.use(express.static('uploads'));
   app.use(cookieParser());
 
   const corsMiddleware = cors({ credentials: true });
@@ -26,7 +26,7 @@ export const setupServer = () => {
       target: 'pino-pretty',
     },
   });
-  app.use(logger);
+  // app.use(logger);
 
   app.get('/', (req, res) => {
     res.json({

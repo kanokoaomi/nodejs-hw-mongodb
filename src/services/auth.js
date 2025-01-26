@@ -14,6 +14,10 @@ import {
   accessTokenLifetime,
   refreshTokenLifetime,
 } from '../constants/user.js';
+import {
+  getFullNameFromGoogleTokenPayload,
+  validateCode,
+} from '../utils/googleOAuth2.js';
 
 export const requestResetToken = async (email) => {
   const user = await UserCollection.findOne({ email });
@@ -66,15 +70,17 @@ export const requestResetToken = async (email) => {
 
 export const resetPassword = async (payload) => {
   let entries;
+  console.log('token: ', payload.jwt);
 
   try {
     entries = jwt.verify(payload.token, getEnvVar('JWT_SECRET'));
-  } catch (err) {
-    if (err instanceof Error) throw createHttpError(401, err.message);
-    throw err;
+    console.log('token: ', payload.jwt);
+  } catch (error) {
+    if (error instanceof Error) throw createHttpError(401, error.message);
+    throw error;
   }
 
-  const user = await UsersCollection.findOne({
+  const user = await UserCollection.findOne({
     email: entries.email,
     _id: entries.sub,
   });
@@ -85,7 +91,7 @@ export const resetPassword = async (payload) => {
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
-  await UsersCollection.updateOne(
+  await UserCollection.updateOne(
     { _id: user._id },
     { password: encryptedPassword },
   );
@@ -133,6 +139,30 @@ export const login = async ({ email, password }) => {
   return SessionCollection.create({
     userId: user._id,
     ...sessionData,
+  });
+};
+
+export const loginOrSignupWithGoogle = async (code) => {
+  const loginTicket = await validateCode(code);
+  const payload = loginTicket.getPayload();
+  if (!payload) throw createHttpError(401);
+
+  let user = await UserCollection.findOne({ email: payload.email });
+  if (!user) {
+    const password = await bcrypt.hash(randomBytes(10), 10);
+    user = await UserCollection.create({
+      email: payload.email,
+      name: getFullNameFromGoogleTokenPayload(payload),
+      password,
+      role: 'parent',
+    });
+  }
+
+  const newSession = сreateSession();
+
+  return await SessionCollection.create({
+    userId: user._id,
+    ...newSession,
   });
 };
 

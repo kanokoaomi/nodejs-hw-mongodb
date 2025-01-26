@@ -74,7 +74,7 @@ export const resetPassword = async (payload) => {
     throw err;
   }
 
-  const user = await UsersCollection.findOne({
+  const user = await UserCollection.findOne({
     email: entries.email,
     _id: entries.sub,
   });
@@ -85,7 +85,7 @@ export const resetPassword = async (payload) => {
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
-  await UsersCollection.updateOne(
+  await UserCollection.updateOne(
     { _id: user._id },
     { password: encryptedPassword },
   );

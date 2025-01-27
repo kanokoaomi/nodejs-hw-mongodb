@@ -8,6 +8,7 @@ import contactsRouter from './routers/contacts.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import authRouter from './routers/auth.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 dotenv.config();
 const PORT = Number(process.env.PORT);
@@ -35,7 +36,7 @@ export const setupServer = () => {
   });
 
   app.use('/auth', authRouter);
-
+  app.use('/api-docs', swaggerDocs());
   app.use('/contacts', contactsRouter);
 
   app.use('*', notFoundHandler);

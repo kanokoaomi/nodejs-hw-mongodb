@@ -60,7 +60,7 @@ export const postContactController = async (req, res) => {
     if (cloudinaryEnable) {
       photo = await saveFileToCloudinary(req.file);
     } else {
-      photo = await saveFileToUploadsDir(req.file);
+      photo = await saveFileToUploads(req.file);
     }
   }
 

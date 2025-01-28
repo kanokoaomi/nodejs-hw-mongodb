@@ -9,8 +9,6 @@ info:
 tags:
   - name: Contacts
     description: All the operations with your contacts
-  - name: Contact
-    description: All the operations with the particular contact (by ID)
 servers:
   - url: http://localhost:3000
   - url: https://nodejs-hw-mongodb-7-in4s.onrender.com

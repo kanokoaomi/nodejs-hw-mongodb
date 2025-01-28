@@ -1,5 +1,5 @@
 tags:
-  - Contact
+  - Contacts
 summary: Update a contact by ID
 operationId: patchContact
 description: Partially updates a contact by its unique ID. You can send only the fields that you want to update.
@@ -13,40 +13,40 @@ parameters:
     schema:
       type: string
       example: '65e4decdd286b30065d54af9'
-      # requestBody:
-      #   description: The fields to update in the contact
-      #   required: true
-      #   content:
-      #     application/json:
-      #       schema:
-      #         type: object
-      #         properties:
-      #           name:
-      #             description: "Contact's updated name (optional)"
-      #             type: string
-      #             example: 'Jane Doe'
-      #           phoneNumber:
-      #             description: "Contact's updated phone number (optional)"
-      #             type: string
-      #             example: '+1234567899'
-      #           email:
-      #             description: "Contact's updated email (optional)"
-      #             type: string
-      #             example: 'example_updated@gmail.com'
-      #           isFavourite:
-      #             description: 'Whether the contact is a favourite (optional)'
-      #             type: boolean
-      #             example: true
-      #           contactType:
-      #             description: 'Updated contact type (optional)'
-      #             type: string
-      #             enum: ['work', 'home', 'personal']
-      #             example: 'work'
-      #           photo:
-      #             description: "Updated photo URL (optional)"
-      #             type: string
-      #             format: url
-      #             example: 'https://res.cloudinary.com/uqwgdf/upload/updated_image.png'
+requestBody:
+  description: The fields to update in the contact (all of them are optional)
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            description: "Contact's updated name (optional)"
+            type: string
+            example: 'Jane Doe'
+          phoneNumber:
+            description: "Contact's updated phone number (optional)"
+            type: string
+            example: '+1234567899'
+          email:
+            description: "Contact's updated email (optional)"
+            type: string
+            example: 'example_updated@gmail.com'
+          isFavourite:
+            description: 'Whether the contact is a favourite (optional)'
+            type: boolean
+            example: true
+          contactType:
+            description: 'Updated contact type (optional)'
+            type: string
+            enum: ['work', 'home', 'personal']
+            example: 'work'
+          photo:
+            description: 'Updated photo URL (optional)'
+            type: string
+            format: url
+            example: 'https://res.cloudinary.com/uqwgdf/upload/updated_image.png'
 responses:
   '200':
     description: The contact has been successfully updated
@@ -67,6 +67,6 @@ responses:
               example: 'Successfully updated contact with id 65e4decdd286b30065d54af9!'
             data:
               type: object
-              $ref: '../../../components/schemas/contact.yaml'
+              $ref: '../../../components/schemas/contacts.yaml'
   '404':
     $ref: '../../../components/responces/404.yaml'

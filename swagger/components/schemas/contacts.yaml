@@ -6,10 +6,10 @@ required:
   - contactType
   - userId
 properties:
-  # _id:
-  #   description: "Contact's id"
-  #   type: string
-  #   example: 65e4decdd286b30065d54af9
+  _id:
+    description: "Contact's id"
+    type: string
+    example: 65e4decdd286b30065d54af9
   name:
     description: "Contact's name"
     type: string
@@ -31,10 +31,10 @@ properties:
     type: string
     enum: ['work', 'home', 'personal']
     example: personal
-  # userId:
-  #   description: 'ID of the user who created this contact'
-  #   type: string
-  #   example: '65e4decdd286b30065d54af9'
+  userId:
+    description: 'ID of the user who created this contact'
+    type: string
+    example: '65e4decdd286b30065d54af9'
   photo:
     description: "Link to the contact's photo"
     type: string

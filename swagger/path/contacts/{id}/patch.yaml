@@ -17,7 +17,7 @@ requestBody:
   description: The fields to update in the contact (all of them are optional)
   required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         properties:
